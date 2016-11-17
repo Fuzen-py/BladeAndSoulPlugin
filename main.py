@@ -29,7 +29,7 @@ async def find_character(ctx, char):
         char = char.get('Character Name')
         if not char:
             raise CharacterNotFound
-        return await Character(car)
+        return await Character(char)
     if char:
         fetch_user(char)
         if not char:
@@ -46,7 +46,7 @@ class BladeAndSoul:
         pass
 
     @bns.command(pass_context=True)
-    async def profile(self, ctx, char=None):
+    async def profile(self, ctx, *, char=None):
         try:
             await self.bot.say((await find_character(ctx, char)).pretty_profile())
             return
@@ -59,7 +59,7 @@ class BladeAndSoul:
             await self.bot.say('An unexpected error has occured.')
 
     @bns.command(pass_context=True)
-    async def stats(self, ctx, char=None):
+    async def stats(self, ctx, *, char=None):
         try:
             await self.bot.say((await find_character(ctx, char)).pretty_stats())
             return
@@ -72,7 +72,7 @@ class BladeAndSoul:
             await self.bot.say('An unexpected error has occured.')
 
     @bns.command(pass_context=True)
-    async def gear(self, ctx, char=None):
+    async def gear(self, ctx, *, char=None):
         try:
             await self.bot.say((await find_character(ctx, char)).pretty_gear())
             return
@@ -85,7 +85,7 @@ class BladeAndSoul:
             await self.bot.say('An unexpected error has occured.')
 
     @bns.command(pass_context=True)
-    async def outfit(self, ctx, char=None):
+    async def outfit(self, ctx, *, char=None):
         try:
             await self.bot.say((await find_character(ctx, char)).pretty_outfit())
             return
@@ -98,7 +98,7 @@ class BladeAndSoul:
             await self.bot.say('An unexpected error has occured.')
 
     @bns.command(pass_context=True)
-    async def save(self, ctx, char):
+    async def save(self, ctx, *, char):
         with open(path.join(DATA, str(ctx.message.author.id)), 'w', errors='backslashreplace') as f:
             ujson.dump(await fetch_profile(char), f)
         await self.bot.say('Saved')

@@ -1,0 +1,2 @@
+ujson
+git+https://github.com/Fuzen-py/BladeAndSoulAPI

@@ -111,7 +111,7 @@ class BladeAndSoul:
         auth = ctx.message.author
         avatar = auth.avatar_url or auth.default_avatar_url
         embed.set_author(name=str(auth), icon_url=avatar)
-        no_blue, with_blue = avg_dmg(attack_power, critical_rate, elemental_bonus)
+        no_blue, with_blue = avg_dmg(attack_power, critical_rate, critical_damage, elemental_bonus)
         embed.add_field(name='No Buff', value=no_blue)
         embed.add_field(name='Blue Buff', value=with_blue)
         await self.bot.say(embed=embed)

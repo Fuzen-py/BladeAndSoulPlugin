@@ -105,7 +105,7 @@ class BladeAndSoul:
         await self.bot.say('Saved')
 
     @bns.command(pass_context=True, name='avg')
-    async def avg_dmg(self, ctx, attack_power: str, critical_rate: str, elemental_bonus: str='100%'):
+    async def avg_dmg(self, ctx, attack_power: str, critical_rate: str, critical_damage: str, elemental_bonus: str='100%'):
         embed = discord.Embed()
         embed.title = 'Average Damage'
         auth = ctx.message.author

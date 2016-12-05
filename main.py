@@ -1,6 +1,7 @@
+import discord
 from os import path
 
-from BladeAndSoul import character as Character
+from BladeAndSoul import character as Character, avg_dmg
 from BladeAndSoul.bns import fetch_profile
 from BladeAndSoul.errors import (CharacterNotFound, Error, InvalidData,
                                  ServiceUnavialable)
@@ -102,6 +103,18 @@ class BladeAndSoul:
         with open(path.join(DATA, str(ctx.message.author.id)), 'w', errors='backslashreplace') as f:
             ujson.dump(await fetch_profile(char), f)
         await self.bot.say('Saved')
+
+    @bns.commands(pass_context=True, name='avg')
+    async def avg_dmg(self, ctx, attack_power: str, critical_rate: str, elemental_bonus: str='100%'):
+        embed = discord.Embed()
+        embed.title = 'Average Damage'
+        auth = ctx.message.author
+        avatar = auth.avatar_url or auth.default_avatar_url
+        embed.set_author(name=str(auth), icon_url=avatar)
+        no_blue, with_blue = avg_dmg(attack_power, critical_rate, elemental_bonus)
+        embed.add_field(name='No Buff', value=no_blue)
+        embed.add_field(name='Blue Buff', value=with_blue)
+        await self.bot.say(embed=embed)
 
 def setup(bot: commands.Bot):
     bot.add_cog(BladeAndSoul(bot))

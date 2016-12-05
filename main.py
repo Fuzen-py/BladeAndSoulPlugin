@@ -1,7 +1,8 @@
 import discord
 from os import path
 
-from BladeAndSoul import character as Character, avg_dmg
+from BladeAndSoul import character as Character
+from BladeAndSoul.bns import avg_dmg
 from BladeAndSoul.bns import fetch_profile
 from BladeAndSoul.errors import (CharacterNotFound, Error, InvalidData,
                                  ServiceUnavialable)

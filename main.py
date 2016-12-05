@@ -104,7 +104,7 @@ class BladeAndSoul:
             ujson.dump(await fetch_profile(char), f)
         await self.bot.say('Saved')
 
-    @bns.commands(pass_context=True, name='avg')
+    @bns.command(pass_context=True, name='avg')
     async def avg_dmg(self, ctx, attack_power: str, critical_rate: str, elemental_bonus: str='100%'):
         embed = discord.Embed()
         embed.title = 'Average Damage'

@@ -66,7 +66,7 @@ class BladeAndSoul:
         """Blade And Soul Profile."""
         try:
             character = await find_character(ctx, char)
-            embed = discord.Embed(color=color_pick(character['Faction']))
+            embed = discord.Embed(color=self.color_pick(character['Faction']))
             embed.set_author(name=character['Character Name'],
                              icon_url=character['Picture'])
             embed.add_field(name='Display Name', value=character['Account Name'])

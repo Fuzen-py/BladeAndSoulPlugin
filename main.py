@@ -76,13 +76,13 @@ class BladeAndSoul:
                 embed.add_field(name='Level',
                                 value= f'{character["Level"]} HM {character["HM Level"]}')
             else:
-                embed.add_field(name='Level', character["Level"])
-            embed.add_field(name='Weapon', character["Gear"]["Weapon"])
+                embed.add_field(name='Level', value=character["Level"])
+            embed.add_field(name='Weapon', value=character["Gear"]["Weapon"])
             if character['Faction']:
-                embed.add_field(name='Faction', character['Faction'])
-                embed.add_field(name='Faction Rank', character['Faction Rank'])
+                embed.add_field(name='Faction', value=character['Faction'])
+                embed.add_field(name='Faction Rank', value=character['Faction Rank'])
                 if character['Clan']:
-                    embed.add_field(name='Clan', character['Clan'])
+                    embed.add_field(name='Clan', value=character['Clan'])
             if len(character['Other Characters']):
                 embed.add_field(name='ALTS',
                                 value='\n'.join(character['Other Characters']))

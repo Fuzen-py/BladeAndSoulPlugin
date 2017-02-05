@@ -50,6 +50,14 @@ class BladeAndSoul:
         """Init Statement."""
         self.bot = bot
 
+    @staticmethod
+    def color_pick(faction):
+        if faction is None:
+            return discord.Color.darker_grey()
+        if faction == 'Cerulean Order':
+            return discord.Color.blue()
+        return discord.Color.red()
+
     @commands.group(pass_context=True)
     async def bns(self, ctx):
         """Blade And Soul Command Group."""
@@ -67,7 +75,7 @@ class BladeAndSoul:
             return
         except ServiceUnavialable:
             await self.bot.say('Cannot access BNS try again later.')
-        except (Error, InvalidData) as e:
+        except (Error, InvalidData):
             await self.bot.say('An unexpected error has occured.')
 
     @bns.command(pass_context=True)
@@ -103,9 +111,25 @@ class BladeAndSoul:
     async def outfit(self, ctx, *, char=None):
         """Blade And Soul Outfit, for the requested character."""
         try:
-            await self.bot.say((await find_character(ctx,
-                                                     char)).pretty_outfit())
-            return
+            character = await find_character(ctx, char)
+            embed = discord.Embed(color=self.color_pick(character['Faction']))
+            auth = character['Character Name']
+            avatar = character['Picture']
+            embed.set_author(name=auth, icon_url=avatar)
+            outfit = character['Outfit']
+            embed.add_field(name='Body', value=outfit['Clothes'])
+            embed.add_field(name='Head', value=outfit['Head'])
+            embed.add_field(name='Face', value=outfit['Face'])
+            embed.add_field(name='Adornment', value=outfit['Adornment'])
+            try:
+                await self.bot.say(embed=embed)
+            except:
+                embed.set_author(name=auth)
+                try:
+                    await self.bot.say(embed=embed)
+                except:
+                    await self.bot.say(character.pretty_outfit())
+
         except CharacterNotFound:
             await self.bot.say('Could not find character')
             return

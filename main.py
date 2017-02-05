@@ -143,7 +143,7 @@ class BladeAndSoul:
         """Save Character, so you dont have to type the name everytime."""
         with open(path.join(DATA, str(ctx.message.author.id)), 'w',
                   errors='backslashreplace') as f:
-            json.dump({'Character Name': (await fetch_profile(char)).name}, f)
+            json.dump({'Character Name': (await fetch_profile(char))['Character Name']}, f)
         await self.bot.say('Saved')
 
     @bns.command(pass_context=True, name='avg')

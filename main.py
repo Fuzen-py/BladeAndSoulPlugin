@@ -1,14 +1,12 @@
-import discord
+import json
 from os import path
 
+import discord
 from BladeAndSoul import character as Character
-from BladeAndSoul.bns import avg_dmg
-from BladeAndSoul.bns import fetch_profile
+from BladeAndSoul.bns import avg_dmg, fetch_profile
 from BladeAndSoul.errors import (CharacterNotFound, Error, InvalidData,
                                  ServiceUnavialable)
 from discord.ext import commands
-
-import json
 
 from .values import DATA
 
@@ -67,9 +65,32 @@ class BladeAndSoul:
     async def profile(self, ctx, *, char=None):
         """Blade And Soul Profile."""
         try:
-            await self.bot.say((await find_character(ctx,
-                                                     char)).pretty_profile())
-            return
+            character = await find_character(ctx, char)
+            embed = discord.Embed(color=color_pick(character['Faction']))
+            embed.set_author(name=character['Character Name'],
+                             icon_url=character['Picture'])
+            embed.add_field(name='Display Name', value=character['Account Name'])
+            embed.add_field(name='Server', value=character["Server"])
+            embed.add_field(name='Character', vlaue=character['Character Name'])
+            if character['HM Level']:
+                embed.add_field(name='Level',
+                                value= f'{character["Level"]} HM {character["HM Level"]}')
+            else:
+                embed.add_field(name='Level', character["Level"])
+            embed.add_field(name='Weapon', character["Gear"]["Weapon"])
+            if character['Faction']:
+                embed.add_field(name='Faction', character['Faction'])
+                embed.add_field(name='Faction Rank', character['Faction Rank'])
+                if character['Clan']:
+                    embed.add_field(name='Clan', character['Clan'])
+            if len(character['Other Characters']):
+                embed.add_field(name='ALTS',
+                                value='\n'.join(character['Other Characters']))
+            embed.set_image(url=character['Picture'])
+            try:
+                await self.bot.say(embed=embed)
+            except discord.Forbidden:
+                await self.bot.say(character.pretty_profile())
         except CharacterNotFound:
             await self.bot.say('Could not find character')
             return
@@ -113,22 +134,17 @@ class BladeAndSoul:
         try:
             character = await find_character(ctx, char)
             embed = discord.Embed(color=self.color_pick(character['Faction']))
-            auth = character['Character Name']
-            avatar = character['Picture']
-            embed.set_author(name=auth, icon_url=avatar)
+            embed.set_author(name=character['Character Name'],
+                             icon_url=character['Picture'])
             outfit = character['Outfit']
-            embed.add_field(name='Body', value=outfit['Clothes'])
-            embed.add_field(name='Head', value=outfit['Head'])
-            embed.add_field(name='Face', value=outfit['Face'])
-            embed.add_field(name='Adornment', value=outfit['Adornment'])
+            for k in ['Clothes', 'Head', 'Face', 'Adornment']:
+                v = outfit[k]
+                if v is not None:
+                    embed.add_field(name=k, value=v)
             try:
                 await self.bot.say(embed=embed)
-            except:
-                embed.set_author(name=auth)
-                try:
-                    await self.bot.say(embed=embed)
-                except:
-                    await self.bot.say(character.pretty_outfit())
+            except discord.Forbidden:
+                await self.bot.say(character.pretty_outfit())
 
         except CharacterNotFound:
             await self.bot.say('Could not find character')

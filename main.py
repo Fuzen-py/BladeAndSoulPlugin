@@ -71,7 +71,7 @@ class BladeAndSoul:
                              icon_url=character['Picture'])
             embed.add_field(name='Display Name', value=character['Account Name'])
             embed.add_field(name='Server', value=character["Server"])
-            embed.add_field(name='Character', vlaue=character['Character Name'])
+            embed.add_field(name='Character', value=character['Character Name'])
             if character['HM Level']:
                 embed.add_field(name='Level',
                                 value= f'{character["Level"]} HM {character["HM Level"]}')
